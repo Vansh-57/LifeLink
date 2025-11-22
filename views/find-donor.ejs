@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Find a Donor - LifeLink</title>
+  <style>
+    /* BASE STYLES */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Arial', sans-serif;
+    }
+    body {
+      color: #333;
+      overflow-x: hidden;
+    }
+    /* ANIMATED BACKGROUND */
+    .background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      background: linear-gradient(135deg, #f8f8f8 0%, #ffecec 100%);
+      overflow: hidden;
+    }
+    .blood-cell {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(200, 0, 0, 0.1);
+      animation: float 15s infinite linear;
+      filter: blur(0.8px);
+    }
+    .blood-cell:nth-child(1) {
+      width: 150px;
+      height: 150px;
+      top: 10%;
+      left: 10%;
+    }
+    .blood-cell:nth-child(2) {
+      width: 200px;
+      height: 200px;
+      top: 60%;
+      left: 80%;
+      animation-delay: -3s;
+      animation-duration: 20s;
+    }
+    .blood-cell:nth-child(3) {
+      width: 100px;
+      height: 100px;
+      top: 80%;
+      left: 20%;
+      animation-delay: -5s;
+      animation-duration: 25s;
+    }
+    .blood-cell:nth-child(4) {
+      width: 180px;
+      height: 180px;
+      top: 30%;
+      left: 50%;
+      animation-delay: -7s;
+    }
+    @keyframes float {
+      0% { transform: translate(0, 0) rotate(0deg); }
+      100% { transform: translate(100px, 100px) rotate(360deg); }
+    }
+    /* NAVIGATION */
+    .navbar {
+      background-color: rgba(255, 255, 255, 0.97);
+      box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 1000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 5%;
+      backdrop-filter: blur(5px);
+    }
+    .logo {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #c00;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .logo::before {
+      content: "🩸";
+      font-size: 1.5rem;
+    }
+    .nav-links {
+      display: flex;
+      list-style: none;
+      gap: 25px;
+    }
+    .nav-links a {
+      text-decoration: none;
+      color: #555;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+    .nav-links a:hover {
+      color: #c00;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background-color: #c00;
+      transition: width 0.3s ease;
+    }
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    .admin-badge {
+      display: inline-block;
+      background-color: #ffd700;
+      color: #333;
+      padding: 5px 12px;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+    .btn {
+      padding: 10px 25px;
+      border-radius: 50px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+    .btn-primary {
+      background-color: #c00;
+      color: white;
+      border: 2px solid #c00;
+    }
+    .btn-primary:hover {
+      background-color: #a00;
+      border-color: #a00;
+    }
+    .btn-secondary {
+      background-color: transparent;
+      color: #c00;
+      border: 2px solid #c00;
+    }
+    .btn-secondary:hover {
+      background-color: #c00;
+      color: white;
+    }
+    /* FIND DONOR CONTENT */
+    .find-donor-content {
+      margin-top: 80px;
+      padding: 40px 5%;
+      max-width: 1400px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .search-section {
+      background: rgba(255,255,255,0.95);
+      border-radius: 15px;
+      padding: 40px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+      margin-bottom: 40px;
+    }
+    .search-section h1 {
+      color: #c00;
+      margin-bottom: 20px;
+      font-size: 2.2rem;
+      text-align: center;
+    }
+    .search-form {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+    }
+    .form-group {
+      flex: 1;
+      min-width: 250px;
+    }
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      color: #555;
+      font-weight: 600;
+    }
+    .form-group select {
+      width: 100%;
+      padding: 12px 15px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+    .form-group select:focus {
+      border-color: #c00;
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(200,0,0,0.1);
+    }
+    .search-btn {
+      align-self: flex-end;
+      padding: 12px 30px;
+      background-color: #c00;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .search-btn:hover {
+      background-color: #a00;
+    }
+    .results-section {
+      background: rgba(255,255,255,0.95);
+      border-radius: 15px;
+      padding: 30px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    }
+    .results-section h2 {
+      color: #c00;
+      margin-bottom: 20px;
+      font-size: 1.8rem;
+      text-align: center;
+    }
+    .donor-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 25px;
+    }
+    .donor-card {
+      background: #fff;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+      transition: all 0.3s ease;
+      position: relative;
+    }
+    .donor-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(200,0,0,0.1);
+    }
+    .donor-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 15px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid #eee;
+    }
+    .donor-avatar {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background-color: #ffecec;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      color: #c00;
+      margin-right: 15px;
+    }
+    .donor-info h3 {
+      color: #333;
+      margin-bottom: 5px;
+    }
+    .donor-info p {
+      color: #777;
+      font-size: 0.9rem;
+    }
+    .donor-details {
+      margin-bottom: 15px;
+    }
+    .detail-row {
+      display: flex;
+      margin-bottom: 8px;
+    }
+    .detail-label {
+      font-weight: 600;
+      color: #555;
+      width: 120px;
+    }
+    .detail-value {
+      color: #333;
+    }
+    .blood-type {
+      display: inline-block;
+      padding: 3px 10px;
+      background-color: #ffecec;
+      color: #c00;
+      border-radius: 4px;
+      font-weight: 700;
+    }
+    .contact-btn {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      background-color: #c00;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-align: center;
+      text-decoration: none;
+    }
+    .contact-btn:hover {
+      background-color: #a00;
+    }
+    .delete-btn {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      background-color: #d32f2f;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-align: center;
+      text-decoration: none;
+      margin-top: 10px;
+    }
+    .delete-btn:hover {
+      background-color: #b71c1c;
+    }
+    .logout-btn {
+      background-color: #c00 !important;
+      color: white !important;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .logout-btn:hover {
+      background-color: #a00 !important;
+    }
+    .no-results {
+      text-align: center;
+      padding: 40px;
+      color: #777;
+    }
+    .alert {
+      background: #fdecea;
+      color: #b71c1c;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    @media (max-width:768px) {
+      .navbar { padding: 15px; }
+      .nav-links {
+        position: fixed;
+        top: 70px;
+        left: -100%;
+        width: 100%;
+        height: calc(100vh - 70px);
+        background: rgba(255,255,255,0.98);
+        flex-direction: column;
+        align-items: center;
+        padding-top: 40px;
+        gap: 30px;
+        transition: left 0.3s ease;
+      }
+      .nav-links.active { left: 0; }
+      .find-donor-content { margin-top: 70px; padding: 20px; }
+      .search-section { padding: 25px; }
+      .search-form { flex-direction: column; }
+      .donor-list { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Animated Background -->
+  <div class="background">
+    <div class="blood-cell"></div>
+    <div class="blood-cell"></div>
+    <div class="blood-cell"></div>
+    <div class="blood-cell"></div>
+  </div>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <a href="/" class="logo">LifeLink</a>
+    <ul class="nav-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="/find-donor" class="active">Find Donor</a></li>
+      <li><a href="/about">About</a></li>
+    </ul>
+    <div class="nav-right">
+      <% if (isAdmin) { %>
+        <span class="admin-badge">ADMIN</span>
+      <% } %>
+      <a href="/logout" class="logout-btn">Logout</a>
+    </div>
+  </nav>
+
+  <main class="find-donor-content">
+    <% if (error) { %>
+      <div class="alert"><%= error %></div>
+    <% } %>
+
+    <!-- Search Section -->
+    <section class="search-section">
+      <h1>Find a Blood Donor</h1>
+      <form class="search-form" method="GET" action="/find-donor">
+        <div class="form-group">
+          <label for="blood-type">Blood Type</label>
+          <select id="blood-type" name="blood-type" required>
+            <option value="">Select Blood Type</option>
+            <% bloodTypes.forEach(type => { %>
+              <option value="<%= type %>"><%= type %></option>
+            <% }); %>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="area">Area</label>
+          <select id="area" name="city" required>
+            <option value="">Select Area</option>
+            <% nagpurAreas.forEach(city => { %>
+              <option value="<%= city %>"><%= city %></option>
+            <% }); %>
+          </select>
+        </div>
+        <button type="submit" class="search-btn">Search Donors</button>
+      </form>
+    </section>
+
+    <!-- Results Section -->
+    <section class="results-section">
+      <h2>Available Donors</h2>
+      <div class="donor-list">
+        <% if (donors && donors.length > 0) { %>
+          <% donors.forEach(donor => { %>
+            <div class="donor-card">
+              <div class="donor-header">
+                <div class="donor-avatar">
+                  <%= donor.full_name.split(' ').map(w => w[0]).join('').toUpperCase() %>
+                </div>
+                <div class="donor-info">
+                  <h3>
+                    <%= donor.full_name %>
+                    <% if (currentUserId && donor.user_id === currentUserId) { %>
+                      <span style="color: gold;" title="You registered with this email">★</span>
+                    <% } %>
+                  </h3>
+                  <p>Registered Donor</p>
+                </div>
+              </div>
+              <div class="donor-details">
+                <div class="detail-row">
+                  <span class="detail-label">Blood Type:</span>
+                  <span class="detail-value"><span class="blood-type"><%= donor.blood_type %></span></span>
+                </div>
+                <div class="detail-row">
+                  <span class="detail-label">Area:</span>
+                  <span class="detail-value"><%= donor.city %></span>
+                </div>
+                <% if (isAdmin) { %>
+                  <div class="detail-row">
+                    <span class="detail-label">Email:</span>
+                    <span class="detail-value"><%= donor.email %></span>
+                  </div>
+                  <div class="detail-row">
+                    <span class="detail-label">Phone:</span>
+                    <span class="detail-value"><%= donor.phone || 'N/A' %></span>
+                  </div>
+                <% } %>
+              </div>
+              <a href="/request-donation?donorId=<%= donor.user_id %>" class="contact-btn">Request Donation</a>
+              <% if (isAdmin || (currentUserEmail && donor.email === currentUserEmail)) { %>
+                <button type="button" class="delete-btn" onclick="deleteDonor(<%= donor.user_id %>, '<%= donor.full_name.replace(/'/g, "\\'") %>', '<%= csrfToken %>')">
+                  <% if (isAdmin) { %>
+                    Delete Donor Account
+                  <% } else { %>
+                    Delete My Account
+                  <% } %>
+                </button>
+              <% } %>
+            </div>
+          <% }); %>
+        <% } else { %>
+          <div class="no-results">No donors found. Try searching with different filters.</div>
+        <% } %>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // Mobile menu toggle
+    document.addEventListener('DOMContentLoaded', function() {
+      const hamburger = document.createElement('div');
+      hamburger.className = 'hamburger';
+      hamburger.innerHTML = '<span></span><span></span><span></span>';
+      document.querySelector('.navbar').appendChild(hamburger);
+      
+      hamburger.addEventListener('click', function() {
+        document.querySelector('.nav-links').classList.toggle('active');
+        hamburger.classList.toggle('active');
+      });
+    });
+
+    async function deleteDonor(donorId, donorName, csrfToken) {
+      const message = donorName ? 
+        `Are you sure you want to delete ${donorName}'s account? This action cannot be undone.` :
+        'Are you sure you want to delete your account? This action cannot be undone.';
+      
+      if (!confirm(message)) {
+        return;
+      }
+
+      try {
+        const response = await fetch(`/api/delete-donor/${donorId}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'CSRF-Token': csrfToken
+          }
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+          alert('Error: ' + result.error);
+          return;
+        }
+
+        alert('Account deleted successfully. Redirecting...');
+        window.location.href = '/find-donor';
+      } catch (error) {
+        console.error('Delete error:', error);
+        alert('An error occurred while deleting the account.');
+      }
+    }
+  </script>
+</body>
+</html>

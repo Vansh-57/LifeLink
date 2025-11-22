@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login - LifeLink</title>
+  <style>
+    /* ===== BASE & RESET STYLES ===== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Arial', sans-serif;
+    }
+    body {
+      background: #f8f8f8;
+      color: #333;
+      overflow-x: hidden;
+    }
+    /* ===== ANIMATED BACKGROUND ===== */
+    .background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      background: linear-gradient(135deg, #f8f8f8 0%, #ffecec 100%);
+    }
+    .blood-cell {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(200, 0, 0, 0.1);
+      animation: float 15s infinite linear;
+      filter: blur(0.8px);
+    }
+    .blood-cell:nth-child(1) {
+      width: 150px;
+      height: 150px;
+      top: 10%;
+      left: 10%;
+    }
+    .blood-cell:nth-child(2) {
+      width: 200px;
+      height: 200px;
+      top: 60%;
+      left: 80%;
+      animation-delay: -3s;
+      animation-duration: 20s;
+    }
+    .blood-cell:nth-child(3) {
+      width: 100px;
+      height: 100px;
+      top: 80%;
+      left: 20%;
+      animation-delay: -5s;
+      animation-duration: 25s;
+    }
+    .blood-cell:nth-child(4) {
+      width: 180px;
+      height: 180px;
+      top: 30%;
+      left: 50%;
+      animation-delay: -7s;
+    }
+    @keyframes float {
+      0% { transform: translate(0,0) rotate(0deg); }
+      100% { transform: translate(100px,100px) rotate(360deg); }
+    }
+    /* ===== NAVIGATION ===== */
+    .navbar {
+      background: rgba(255,255,255,0.97);
+      box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 1000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 5%;
+      backdrop-filter: blur(5px);
+    }
+    .logo {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #c00;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .logo::before {
+      content: "🩸";
+      font-size: 1.5rem;
+    }
+    .nav-links {
+      display: flex;
+      list-style: none;
+      gap: 25px;
+    }
+    .nav-links a {
+      text-decoration: none;
+      color: #555;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: #c00;
+    }
+    .btn {
+      padding: 10px 25px;
+      border-radius: 50px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+    .btn-secondary {
+      background: transparent;
+      color: #c00;
+      border: 2px solid #c00;
+    }
+    .btn-secondary:hover {
+      background: #c00;
+      color: #fff;
+    }
+    /* ===== FORM CONTAINER ===== */
+    .auth-container {
+      margin-top: 80px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: calc(100vh - 160px);
+      padding: 20px;
+    }
+    .auth-form {
+      background: rgba(255,255,255,0.95);
+      border-radius: 15px;
+      padding: 40px;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+      animation: fadeIn 0.5s ease-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .auth-form h1 {
+      color: #c00;
+      text-align: center;
+      margin-bottom: 10px;
+      font-size: 2rem;
+    }
+    .auth-form p {
+      color: #666;
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 1rem;
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      color: #555;
+      font-weight: 500;
+      font-size: 0.9rem;
+    }
+    .form-group input {
+      width: 100%;
+      padding: 12px 15px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: all 0.3s;
+    }
+    .form-group input:focus {
+      border-color: #c00;
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(200,0,0,0.1);
+    }
+    .submit-btn {
+      width: 100%;
+      padding: 12px;
+      background: #c00;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .submit-btn:hover {
+      background: #a00;
+    }
+    .error-msg {
+      color: #b71c1c;
+      font-size: 0.9rem;
+      margin-top: 5px;
+      text-align: center;
+    }
+    /* ===== SUCCESS MODAL ===== */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+    }
+    .modal {
+      background: #fff;
+      padding: 30px;
+      border-radius: 8px;
+      text-align: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    }
+    .modal h2 {
+      color: #0a0;
+      font-size: 1.8rem;
+      margin-bottom: 20px;
+    }
+    .modal button {
+      padding: 10px 20px;
+      background: #c00;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    @media (max-width: 768px) {
+      .auth-form { padding: 30px; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Animated Background -->
+  <div class="background">
+    <div class="blood-cell"></div>
+    <div class="blood-cell"></div>
+    <div class="blood-cell"></div>
+    <div class="blood-cell"></div>
+  </div>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <a href="/" class="logo">LifeLink</a>
+    <ul class="nav-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="/find-donor">Find Donor</a></li>
+      <li><a href="/register">Register</a></li>
+      <li><a href="/about">About</a></li>
+    </ul>
+    <div>
+      <a href="/login" class="btn btn-secondary">Login</a>
+    </div>
+  </nav>
+
+  <!-- Registration Form Container -->
+  <div class="auth-container">
+    <div class="auth-form">
+      <h1>Login</h1>
+      <p>Access your LifeLink account</p>
+      
+      <form id="loginForm">
+        <!-- CSRF Token -->
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        
+        <!-- Email -->
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" name="email" class="form-control" required>
+          <div class="error-msg" data-error="email"></div>
+        </div>
+        
+        <!-- Password -->
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" class="form-control" required>
+          <div class="error-msg" data-error="password"></div>
+        </div>
+        
+        <!-- General Error -->
+        <div class="error-msg" data-error="general"></div>
+        
+        <button type="submit" class="submit-btn">Login</button>
+      </form>
+      
+      <!-- Links -->
+      <div style="text-align: center; margin-top: 20px; color: #666;">
+        <p>Don't have an account? <a href="/register" style="color: #c00; text-decoration: none;">Register here</a></p>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Success Modal -->
+  <div class="modal-overlay" id="successModal">
+    <div class="modal">
+      <h2>✓ Login Successful!</h2>
+      <p>Redirecting you to home...</p>
+    </div>
+  </div>
+  
+  <script>
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const form = e.target;
+      const formData = new FormData(form);
+      const data = Object.fromEntries(formData.entries());
+      
+      // Clear previous error messages
+      document.querySelectorAll('.error-msg').forEach(el => el.textContent = '');
+      
+      try {
+        const response = await fetch('/api/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+        const result = await response.json();
+        if (!response.ok) {
+          throw result;
+        }
+        // Show success modal on successful login
+        document.getElementById('successModal').style.display = 'flex';
+        setTimeout(() => {
+          window.location.href = '/find-donor';
+        }, 1500);
+      } catch (error) {
+        if (error.errors) {
+          Object.entries(error.errors).forEach(([field, message]) => {
+            const errorElement = document.querySelector(`[data-error="${field}"]`);
+            if (errorElement) errorElement.textContent = message;
+          });
+        } else {
+          console.error('Unexpected error:', error);
+        }
+      }
+    });
+  </script>
+</body>
+</html>

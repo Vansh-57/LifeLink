@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LifeLink - Registration</title>
+    <style>
+        /* ===== BASE STYLES ===== */
+        :root {
+            --primary-red: #c00;
+            --primary-blue: #0066cc;
+            --text-dark: #333;
+            --text-medium: #555;
+            --text-light: #777;
+            --bg-light: #f8f8f8;
+            --bg-pink: #fff9f9;
+            --bg-blue: #f9f9ff;
+            --border-light: #eee;
+            --shadow-red: rgba(200, 0, 0, 0.08);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+        
+        /* ===== LEGAL SECTION ===== */
+        .legal-section {
+            margin: 2.5rem auto;
+            max-width: 800px;
+            padding: 0 1rem;
+        }
+        
+        .legal-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px var(--shadow-red);
+            overflow: hidden;
+        }
+        
+        /* Tab Navigation */
+        .legal-tabs {
+            display: flex;
+            border-bottom: 1px solid #ffecec;
+        }
+        
+        .tab-btn {
+            flex: 1;
+            padding: 1rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--text-light);
+            transition: all 0.3s ease;
+            position: relative;
+            font-size: 1rem;
+        }
+        
+        .tab-btn:hover {
+            color: var(--primary-red);
+        }
+        
+        .tab-btn.active {
+            color: var(--primary-red);
+        }
+        
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--primary-red);
+        }
+        
+        .tab-btn[data-tab="privacy"].active {
+            color: var(--primary-blue);
+        }
+        
+        .tab-btn[data-tab="privacy"].active::after {
+            background: var(--primary-blue);
+        }
+        
+        /* Tab Content */
+        .tab-content {
+            padding: 1.5rem;
+            max-height: 250px;
+            overflow-y: auto;
+        }
+        
+        .tab-pane {
+            display: none;
+        }
+        
+        .tab-pane.active {
+            display: block;
+        }
+        
+        /* Policy Items */
+        .policy-item {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.25rem;
+            padding: 1rem;
+            background: var(--bg-pink);
+            border-left: 4px solid var(--primary-red);
+            border-radius: 0 8px 8px 0;
+            align-items: flex-start;
+        }
+        
+        #privacy .policy-item {
+            background: var(--bg-blue);
+            border-left-color: var(--primary-blue);
+        }
+        
+        .policy-number {
+            background: var(--primary-red);
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 0.9rem;
+        }
+        
+        #privacy .policy-number {
+            background: var(--primary-blue);
+        }
+        
+        .policy-text h4 {
+            color: var(--primary-red);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+        
+        #privacy .policy-text h4 {
+            color: var(--primary-blue);
+        }
+        
+        .policy-text p {
+            color: var(--text-medium);
+            font-size: 0.95rem;
+        }
+        
+        /* Agreement Checkboxes */
+        .legal-agreement {
+            padding: 1.25rem;
+            background: var(--bg-light);
+            border-top: 1px solid var(--border-light);
+        }
+        
+        .agreement-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 0.75rem;
+        }
+        
+        .agreement-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .agreement-item input[type="checkbox"] {
+            margin-right: 0.75rem;
+            margin-top: 0.2rem;
+            min-width: 18px;
+            min-height: 18px;
+        }
+        
+        .agreement-item label {
+            color: var(--text-medium);
+            font-size: 0.95rem;
+            user-select: none;
+        }
+        
+        .agreement-item strong {
+            color: var(--primary-red);
+            font-weight: 600;
+        }
+        
+        #privacy + .legal-agreement .agreement-item:last-child strong {
+            color: var(--primary-blue);
+        }
+        
+        /* ===== RESPONSIVE DESIGN ===== */
+        @media (max-width: 768px) {
+            .legal-tabs {
+                flex-direction: column;
+            }
+            
+            .tab-content {
+                max-height: 300px;
+            }
+            
+            .policy-item {
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Terms & Privacy Section -->
+    <section class="legal-section">
+        <div class="legal-container">
+            <!-- Tab Navigation -->
+            <div class="legal-tabs">
+                <button class="tab-btn active" data-tab="terms">Terms & Conditions</button>
+               
+            </div>
+
+            <!-- Tab Content -->
+            <div class="tab-content">
+                <!-- Terms Content -->
+                <div id="terms" class="tab-pane active">
+                    <div class="policy-item">
+                        <div class="policy-number">1</div>
+                        <div class="policy-text">
+                            <h4>Eligibility Requirements</h4>
+                            <p>You must be 18-65 years old, weigh at least 50kg (110 lbs), and be in good health to donate blood. Certain medical conditions may temporarily or permanently defer you.</p>
+                        </div>
+                    </div>
+
+                    <div class="policy-item">
+                        <div class="policy-number">2</div>
+                        <div class="policy-text">
+                            <h4>Health Screening</h4>
+                            <p>You must complete a health screening questionnaire truthfully before each donation. We reserve the right to refuse any donation based on health concerns.</p>
+                        </div>
+                    </div>
+
+                    <div class="policy-item">
+                        <div class="policy-number">3</div>
+                        <div class="policy-text">
+                            <h4>Donation Frequency</h4>
+                            <p>Whole blood donors must wait at least 56 days between donations. We track donations to ensure compliance with safety guidelines.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Privacy Content -->
+                
+
+            <!-- Agreement Checkboxes -->
+            <div class="legal-agreement">
+                <div class="agreement-item">
+                    <input type="checkbox" id="terms-agree" name="terms-agree" required>
+                    <label for="terms-agree">I have read and agree to the <strong>Terms & Conditions</strong> governing blood donation</label>
+                </div>
+                <div class="agreement-item">
+                    <input type="checkbox" id="privacy-agree" name="privacy-agree" required>
+                    <label for="privacy-agree">I have read

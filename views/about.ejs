@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - LifeLink Blood Donation</title>
+    <style>
+        /* ===== RESET & BASE STYLES ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        /* ===== ANIMATED BACKGROUND ===== */
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(135deg, #f8f8f8 0%, #ffecec 100%);
+            overflow: hidden;
+        }
+
+        .blood-cell {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(200, 0, 0, 0.1);
+            animation: float 15s infinite linear;
+            filter: blur(0.8px);
+        }
+
+        .blood-cell:nth-child(1) {
+            width: 150px;
+            height: 150px;
+            top: 10%;
+            left: 10%;
+            background: radial-gradient(circle, rgba(255,0,0,0.1) 0%, rgba(200,0,0,0.05) 70%);
+        }
+
+        .blood-cell:nth-child(2) {
+            width: 200px;
+            height: 200px;
+            top: 60%;
+            left: 80%;
+            animation-delay: -3s;
+            animation-duration: 20s;
+            background: radial-gradient(circle, rgba(255,0,0,0.08) 0%, rgba(200,0,0,0.03) 70%);
+        }
+
+        .blood-cell:nth-child(3) {
+            width: 100px;
+            height: 100px;
+            top: 80%;
+            left: 20%;
+            animation-delay: -5s;
+            animation-duration: 25s;
+            background: radial-gradient(circle, rgba(255,0,0,0.12) 0%, rgba(200,0,0,0.04) 70%);
+        }
+
+        .blood-cell:nth-child(4) {
+            width: 180px;
+            height: 180px;
+            top: 30%;
+            left: 50%;
+            animation-delay: -7s;
+            background: radial-gradient(circle, rgba(255,0,0,0.15) 0%, rgba(200,0,0,0.07) 70%);
+        }
+
+        .pulse {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255,0,0,0.03) 0%, rgba(255,0,0,0) 70%);
+            animation: pulse 8s infinite ease-in-out;
+            opacity: 0;
+        }
+
+        .heartbeat-line {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background: linear-gradient(90deg, transparent, rgba(200, 0, 0, 0.1), transparent);
+            animation: heartbeat 1.5s infinite;
+            transform-origin: center;
+        }
+
+        /* ===== KEYFRAME ANIMATIONS ===== */
+        @keyframes float {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(50px, 50px) rotate(90deg); }
+            50% { transform: translate(100px, -30px) rotate(180deg); }
+            75% { transform: translate(-50px, 50px) rotate(270deg); }
+            100% { transform: translate(0, 0) rotate(360deg); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.8); opacity: 0; }
+            50% { opacity: 0.3; }
+            100% { transform: scale(1.5); opacity: 0; }
+        }
+
+        @keyframes heartbeat {
+            0% { transform: scaleX(0.8); opacity: 0.3; }
+            14% { transform: scaleX(1.1); opacity: 0.5; }
+            28% { transform: scaleX(0.9); opacity: 0.4; }
+            42% { transform: scaleX(1.05); opacity: 0.5; }
+            70% { transform: scaleX(1); opacity: 0.3; }
+            100% { transform: scaleX(0.8); opacity: 0.3; }
+        }
+
+        /* ===== NAVIGATION BAR ===== */
+        .navbar {
+            background-color: rgba(255, 255, 255, 0.97);
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 5%;
+            backdrop-filter: blur(5px);
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #c00;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo::before {
+            content: "🩸";
+            font-size: 1.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #555;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 5px 0;
+        }
+
+        .nav-links a:hover {
+            color: #c00;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: #c00;
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after,
+        .nav-links a.active {
+            width: 100%;
+            color: #c00;
+        }
+
+        .btn {
+            padding: 10px 25px;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-block;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background-color: #c00;
+            color: white;
+            border: 2px solid #c00;
+        }
+
+        .btn-primary:hover {
+            background-color: #a00;
+            border-color: #a00;
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: #c00;
+            border: 2px solid #c00;
+        }
+
+        .btn-secondary:hover {
+            background-color: #c00;
+            color: white;
+        }
+
+        /* ===== ABOUT PAGE CONTENT ===== */
+        .about-content {
+            margin-top: 80px;
+            padding: 40px 5%;
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-about {
+            text-align: center;
+            padding: 60px 0 40px;
+        }
+
+        .hero-about h1 {
+            font-size: 2.8rem;
+            color: #c00;
+            margin-bottom: 20px;
+            line-height: 1.3;
+        }
+
+        .hero-about p {
+            font-size: 1.2rem;
+            color: #555;
+            max-width: 800px;
+            margin: 0 auto 30px;
+            line-height: 1.6;
+        }
+
+        .mission-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 40px;
+            margin: 40px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .mission-section h2 {
+            color: #c00;
+            margin-bottom: 20px;
+            font-size: 2rem;
+            text-align: center;
+        }
+
+        .mission-section p {
+            color: #666;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin: 50px 0;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(200, 0, 0, 0.1);
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            color: #c00;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            color: #555;
+            font-size: 1.1rem;
+        }
+
+        .team-section {
+            margin: 60px 0;
+        }
+
+        .team-section h2 {
+            color: #c00;
+            margin-bottom: 40px;
+            font-size: 2rem;
+            text-align: center;
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .team-member {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+
+        .team-member:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(200, 0, 0, 0.1);
+        }
+
+        .member-image {
+            height: 250px;
+            background-color: #ffecec;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #c00;
+            font-size: 4rem;
+        }
+
+        .member-info {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .member-info h3 {
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .member-info p {
+            color: #777;
+            margin-bottom: 15px;
+            font-style: italic;
+        }
+
+        .member-contact {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .member-contact a {
+            color: #c00;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .member-contact a:hover {
+            color: #a00;
+            transform: scale(1.2);
+        }
+
+        .cta-section {
+            text-align: center;
+            margin: 60px 0 40px;
+        }
+
+        .cta-section h2 {
+            color: #c00;
+            margin-bottom: 20px;
+            font-size: 2rem;
+        }
+
+        .cta-section p {
+            color: #555;
+            max-width: 700px;
+            margin: 0 auto 30px;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        /* ===== RESPONSIVE DESIGN ===== */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 15px;
+            }
+            
+            .nav-links {
+                position: fixed;
+                top: 70px;
+                left: -100%;
+                width: 100%;
+                height: calc(100vh - 70px);
+                background-color: rgba(255, 255, 255, 0.98);
+                flex-direction: column;
+                align-items: center;
+                padding-top: 40px;
+                gap: 30px;
+                transition: left 0.3s ease;
+            }
+            
+            .nav-links.active {
+                left: 0;
+            }
+            
+            .about-content {
+                margin-top: 70px;
+                padding: 20px;
+            }
+            
+            .hero-about h1 {
+                font-size: 2.2rem;
+            }
+            
+            .mission-section, 
+            .stat-card {
+                padding: 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="background">
+        <div class="blood-cell"></div>
+        <div class="blood-cell"></div>
+        <div class="blood-cell"></div>
+        <div class="blood-cell"></div>
+        <div class="pulse"></div>
+        <div class="heartbeat-line"></div>
+    </div>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <a href="/" class="logo">LifeSaver</a>
+        <ul class="nav-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="/find-donor">Find Donor</a></li>
+            <li><a href="/register">Register</a></li>
+            <li><a href="/about" class="active">About</a></li>
+        </ul>
+        <div>
+            <a href="login" class="btn btn-secondary">Login</a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="about-content">
+        <section class="hero-about">
+            <h1>Our Mission to Save Lives Through Blood Donation</h1>
+            <p>LifeLink connects blood donors with recipients in urgent need, creating a community dedicated to giving the gift of life.</p>
+            <div class="action-buttons">
+                <a href="/register" class="btn btn-primary">Become a Donor</a>
+                <a href="/find-donor" class="btn btn-secondary">Find Blood Now</a>
+            </div>
+        </section>
+
+        <section class="mission-section">
+            <h2>Why Blood Donation Matters</h2>
+            <p>Every 2 seconds, someone in the world needs blood. Accidents, surgeries, childbirth, anemia, and cancer treatments all require blood transfusions. Yet only 3% of age-eligible people donate blood yearly.</p>
+            <p>LifeLink was founded in 2023 to bridge this critical gap. Our platform makes it easy for voluntary donors to register and for patients to find compatible blood types during emergencies.</p>
+            <p>We believe no one should die waiting for blood. Through technology and community engagement, we're creating a sustainable blood donation ecosystem across hospitals, blood banks, and individual donors.</p>
+        </section>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number">10,000+</div>
+                <div class="stat-label">Lives Saved</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">25,000+</div>
+                <div class="stat-label">Registered Donors</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">120+</div>
+                <div class="stat-label">Partner Hospitals</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">15</div>
+                <div class="stat-label">Cities Covered</div>
+            </div>
+        </div>
+
+        <section class="team-section">
+            <h2>Meet Our Team</h2>
+            <div class="team-grid">
+                <div class="team-member">
+                    <div class="member-image">👨‍⚕️</div>
+                    <div class="member-info">
+                        <h3>Tejal Kawale</h3>
+                        <p>Soft ware developer</p>
+                        <div class="member-contact">
+                            <a href="#"><i class="fab fa-linkedin"></i></a>
+                            <a href="#"><i class="fas fa-envelope"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="team-member">
+                    <div class="member-image">👩‍💻</div>
+                    <div class="member-info">
+                        <h3>Vansh Bargat</h3>
+                        <p>Technology Lead</p>
+                        <div class="member-contact">
+                            <a href="#"><i class="fab fa-linkedin"></i></a>
+                            <a href="#"><i class="fas fa-envelope"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="team-member">
+                    <div class="member-image">👨‍💼</div>
+                    <div class="member-info">
+                        <h3>tejal and Vansh</h3>
+                        <p>Community Manager</p>
+                        <div class="member-contact">
+                            <a href="#"><i class="fab fa-linkedin"></i></a>
+                            <a href="#"><i class="fas fa-envelope"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="cta-section">
+            <h2>Join Our Life-Saving Mission</h2>
+            <p>Whether you're a potential donor, hospital partner, or volunteer, your participation helps ensure blood is available when lives are on the line.</p>
+            <div class="action-buttons">
+                <a href="/register" class="btn btn-primary">Register as Donor</a>
+                <a href="/partner" class="btn btn-secondary">Partner With Us</a>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Mobile menu toggle
+        document.addEventListener('DOMContentLoaded', function() {
+            const hamburger = document.createElement('div');
+            hamburger.className = 'hamburger';
+            hamburger.innerHTML = '<span></span><span></span><span></span>';
+            document.querySelector('.navbar').appendChild(hamburger);
+            
+            hamburger.addEventListener('click', function() {
+                document.querySelector('.nav-links').classList.toggle('active');
+                hamburger.classList.toggle('active');
+            });
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+          const hamburger = document.createElement('div');
+          hamburger.className = 'hamburger';
+          hamburger.innerHTML = '<span></span><span></span><span></span>';
+          
+          hamburger.addEventListener('click', (e) => {
+            e.stopPropagation();
+            document.querySelector('.nav-links').classList.toggle('active');
+            hamburger.classList.toggle('active');
+          });
+    
+          document.querySelector('.navbar').appendChild(hamburger);
+        });
+      </script>
+    <!-- Font Awesome for icons (add to head in real implementation) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</body>
+</html>

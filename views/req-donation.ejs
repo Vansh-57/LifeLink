@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Request Donation – <%= donor.full_name %></title>
+    <style>
+      /* ===== BASE STYLES ===== */
+      * { margin:0; padding:0; box-sizing:border-box; font-family:'Arial',sans-serif; }
+      body { color:#333; overflow-x:hidden; background:#f8f8f8; }
+      /* ===== ANIMATED BACKGROUND ===== */
+      .background { position:fixed; top:0; left:0; width:100%; height:100%; z-index:-1; background:linear-gradient(135deg,#f8f8f8 0%,#ffecec 100%); overflow:hidden; }
+      .blood-cell { position:absolute; border-radius:50%; background:rgba(200,0,0,0.1); animation:float 15s infinite linear; filter:blur(0.8px); }
+      .blood-cell:nth-child(1){width:150px;height:150px;top:10%;left:10%;}
+      .blood-cell:nth-child(2){width:200px;height:200px;top:60%;left:80%;animation-delay:-3s;animation-duration:20s;}
+      .blood-cell:nth-child(3){width:100px;height:100px;top:80%;left:20%;animation-delay:-5s;animation-duration:25s;}
+      .blood-cell:nth-child(4){width:180px;height:180px;top:30%;left:50%;animation-delay:-7s;}
+      @keyframes float{0%{transform:translate(0,0) rotate(0deg);}100%{transform:translate(100px,100px) rotate(360deg);}}
+      /* ===== NAVIGATION ===== */
+      .navbar{background:rgba(255,255,255,0.97);box-shadow:0 2px 15px rgba(0,0,0,0.1);position:fixed;width:100%;top:0;z-index:1000;display:flex;justify-content:space-between;align-items:center;padding:15px 5%;backdrop-filter:blur(5px);}
+      .logo{font-size:1.8rem;font-weight:700;color:#c00;text-decoration:none;display:flex;align-items:center;gap:10px;}
+      .logo::before{content:"🩸";font-size:1.5rem;}
+      .nav-links{display:flex;list-style:none;gap:25px;}
+      .nav-links a{text-decoration:none;color:#555;font-weight:600;font-size:1rem;transition:all .3s;}
+      .nav-links a:hover{color:#c00;}
+      .btn{padding:10px 25px;border-radius:50px;font-weight:600;text-decoration:none;transition:all .3s;}
+      .btn-primary{background:#c00;color:#fff;border:2px solid #c00;}
+      .btn-primary:hover{background:#a00;border-color:#a00;}
+      .btn-secondary{background:transparent;color:#c00;border:2px solid #c00;}
+      .btn-secondary:hover{background:#c00;color:#fff;}
+      /* ===== FORM ===== */
+      .request-container{margin:100px auto;padding:40px 5%;max-width:800px;background:rgba(255,255,255,0.97);border-radius:15px;box-shadow:0 10px 30px rgba(0,0,0,0.05);}
+      .request-container h2{text-align:center;color:#c00;margin-bottom:20px;font-size:2rem;}
+      .request-container p{text-align:center;margin-bottom:30px;font-size:1rem;color:#555;}
+      .request-form{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+      .form-group{margin-bottom:20px;}
+      .form-group.full-width{grid-column:1/-1;}
+      .form-group label{display:block;margin-bottom:8px;font-weight:600;color:#555;}
+      .required-field::after{content:" *";color:#c00;}
+      .form-control{width:100%;padding:12px 15px;border:1px solid #ddd;border-radius:8px;font-size:1rem;transition:all .3s;}
+      .form-control:focus{border-color:#c00;outline:none;box-shadow:0 0 0 3px rgba(200,0,0,0.1);}
+      .submit-btn{grid-column:1/-1;padding:15px;background:#c00;color:#fff;border:none;border-radius:8px;font-size:1.1rem;font-weight:600;cursor:pointer;transition:all .3s;margin-top:10px;}
+      .submit-btn:hover{background:#a00;}
+      /* ===== MODAL ===== */
+      .modal-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);align-items:center;justify-content:center;z-index:2000;}
+      .modal{background:#fff;padding:30px;border-radius:8px;text-align:center;box-shadow:0 2px 10px rgba(0,0,0,0.2);max-width:400px;width:90%;}
+      .modal h2{color:#0a0;font-size:1.8rem;margin-bottom:20px;}
+      .modal p{margin-bottom:30px;font-size:1rem;}
+      .modal a.back-btn{display:inline-block;padding:10px 20px;background:#c00;color:#fff;border-radius:4px;text-decoration:none;transition:background .3s;}
+      .modal a.back-btn:hover{background:#a00;}
+      @media(max-width:768px){.request-form{grid-template-columns:1fr;} .request-container{padding:25px;}}
+    </style>
+  </head>
+  <body>
+    <!-- Animated Background -->
+    <div class="background">
+      <div class="blood-cell"></div>
+      <div class="blood-cell"></div>
+      <div class="blood-cell"></div>
+      <div class="blood-cell"></div>
+    </div>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+      <a href="/" class="logo">LifeLink</a>
+      <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/find-donor">Find Donor</a></li>
+        <li><a href="/register">Register</a></li>
+        <li><a href="/about">About</a></li>
+      </ul>
+      <div><a href="/login" class="btn btn-secondary">Login</a></div>
+    </nav>
+
+    <!-- Request Form -->
+    <div class="request-container">
+      <h2>Request Blood Donation</h2>
+      <p>Your request will be sent to <strong><%= donor.full_name %> (<%= donor.email %>)</strong></p>
+      <form id="bloodRequestForm" class="request-form" action="/submit-request" method="POST">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <input type="hidden" name="donorId" value="<%= donor.user_id %>">
+
+        <div class="form-group">
+          <label class="required-field">Patient Full Name</label>
+          <input type="text" name="patientName" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label class="required-field">Patient Age</label>
+          <input type="number" name="patientAge" class="form-control" min="0" max="120" required>
+        </div>
+        <div class="form-group">
+          <label class="required-field">Required Blood Type</label>
+          <select name="bloodType" class="form-control" required>
+            <option value="">Select</option>
+            <% ['A+','A-','B+','B-','AB+','AB-','O+','O-'].forEach(bt => { %>
+              <option value="<%= bt %>"><%= bt %></option>
+            <% }) %>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="required-field">Units Needed</label>
+          <input type="number" name="unitsNeeded" class="form-control" min="1" max="10" value="1" required>
+        </div>
+        <div class="form-group full-width">
+          <label class="required-field">Hospital/Clinic Name</label>
+          <input type="text" name="hospital" class="form-control" required>
+        </div>
+        <div class="form-group full-width">
+          <label class="required-field">Hospital Address</label>
+          <input type="text" name="hospitalAddress" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label class="required-field">Your Name</label>
+          <input type="text" name="requesterName" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label class="required-field">Your Phone</label>
+          <input type="tel" name="requesterPhone" class="form-control" required>
+        </div>
+        <div class="form-group full-width">
+          <label>Your Email</label>
+          <input type="email" name="requesterEmail" class="form-control">
+        </div>
+        <div class="form-group">
+          <label class="required-field">Urgency Level</label>
+          <select name="urgency" class="form-control" required>
+            <option value="">Select</option>
+            <option value="emergency">Emergency</option>
+            <option value="urgent">Urgent</option>
+            <option value="scheduled">Scheduled</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Needed By Date</label>
+          <input type="date" name="neededBy" class="form-control">
+        </div>
+        <div class="form-group full-width">
+          <label>Medical Condition</label>
+          <input type="text" name="medicalCondition" class="form-control">
+        </div>
+        <div class="form-group full-width">
+          <label>Additional Information</label>
+          <textarea name="additionalInfo" class="form-control"></textarea>
+        </div>
+
+        <button type="submit" class="submit-btn">Send Request</button>
+      </form>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="successModal" class="modal-overlay">
+      <div class="modal">
+        <h2>Request Sent!</h2>
+        <p>Your request has been emailed to <strong><%= donor.full_name %></strong>.</p>
+        <a href="/" class="back-btn btn btn-primary">Back to Home</a>
+      </div>
+    </div>
+
+    <script>
+      document.getElementById('bloodRequestForm').addEventListener('submit', async e => {
+        e.preventDefault();
+        const data = Object.fromEntries(new FormData(e.target).entries());
+        try {
+          const res = await fetch(e.target.action, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+          });
+          const json = await res.json();
+          if (res.ok && json.success) {
+            e.target.style.display = 'none';
+            document.getElementById('successModal').style.display = 'flex';
+          } else {
+            alert(json.error || 'Failed to send request.');
+          }
+        } catch (err) {
+          console.error(err);
+          alert('Network error.');
+        }
+      });
+    </script>
+  </body>
+</html>
