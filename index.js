@@ -14,23 +14,34 @@ import csrf from 'csurf';
 import validator from 'validator';
 import nodemailer from 'nodemailer';
 import pgSession from 'connect-pg-simple';
+import pg from 'pg';
+import dotenv from 'dotenv';
+import nodemailer from 'nodemailer';
 
 dotenv.config();
 
 const { Pool } = pg;
+
 const pool = new Pool({
   user: process.env.DB_USER || 'postgres',
   password: process.env.DB_PASSWORD,
   host: process.env.DB_HOST || 'localhost',
   database: process.env.DB_NAME || 'LIFEdb',
   port: process.env.DB_PORT || 5432,
-  ssl: process.env.DB_SSL === 'true' ? { rejectUnauthorized: false } : false,
+  ssl: process.env.DB_SSL === 'true' 
+       ? { rejectUnauthorized: false } 
+       : process.env.NODE_ENV === 'production' 
+         ? { rejectUnauthorized: false } 
+         : false,
 });
 
-// Test DB connection
+// Test database connection
 pool.query('SELECT NOW()')
   .then(() => console.log('✅ Database connected successfully'))
-  .catch(err => { console.error(err.message); process.exit(1); });
+  .catch(err => { 
+      console.error('❌ Database connection error:', err.message); 
+      process.exit(1); 
+  });
 
 // Nodemailer setup
 const transporter = nodemailer.createTransport({
@@ -40,6 +51,8 @@ const transporter = nodemailer.createTransport({
     pass: process.env.EMAIL_PASS,
   }
 });
+
+export { pool, transporter };
 
 const app = express();
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
