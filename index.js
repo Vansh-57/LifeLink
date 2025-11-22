@@ -15,22 +15,16 @@ import validator from 'validator';
 import nodemailer from 'nodemailer';
 import pgSession from 'connect-pg-simple';
 
-
 dotenv.config();
 
 const { Pool } = pg;
 
+// Database connection - works for both local and Railway
 const pool = new Pool({
-  user: process.env.DB_USER || 'postgres',
-  password: process.env.DB_PASSWORD,
-  host: process.env.DB_HOST || 'localhost',
-  database: process.env.DB_NAME || 'LIFEdb',
-  port: process.env.DB_PORT || 5432,
-  ssl: process.env.DB_SSL === 'true' 
-       ? { rejectUnauthorized: false } 
-       : process.env.NODE_ENV === 'production' 
-         ? { rejectUnauthorized: false } 
-         : false,
+  connectionString: process.env.DATABASE_URL,
+  ssl: process.env.NODE_ENV === 'production' 
+    ? { rejectUnauthorized: false }
+    : false
 });
 
 // Test database connection
@@ -78,7 +72,7 @@ app.use(helmet({
     directives: {
       defaultSrc: ["'self'"],
       scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
-      scriptSrcAttr: ["'unsafe-inline'"],  // This is the key line!
+      scriptSrcAttr: ["'unsafe-inline'"],
       styleSrc: ["'self'", "'unsafe-inline'"],
       imgSrc: ["'self'", "data:"]
     }
@@ -107,7 +101,11 @@ app.use(session({
   secret: process.env.SESSION_SECRET || 'secret',
   resave: false,
   saveUninitialized: false,
-  cookie: { maxAge: 30 * 24 * 60 * 60 * 1000 }  // 30 days
+  cookie: { 
+    maxAge: 30 * 24 * 60 * 60 * 1000,  // 30 days
+    secure: process.env.NODE_ENV === 'production',
+    httpOnly: true
+  }
 }));
 
 // CSRF Protection
@@ -411,6 +409,7 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+
 // TEMPORARY: Create admin user on server start
 (async function createAdminIfNeeded() {
   try {
