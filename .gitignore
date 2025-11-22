@@ -6,4 +6,6 @@ dist/
 build/
 coverage/
 .vscode/
-.idea/
+.idea/node_modules/ 
+.env 
+.env 
