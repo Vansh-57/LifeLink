@@ -14,9 +14,7 @@ import csrf from 'csurf';
 import validator from 'validator';
 import nodemailer from 'nodemailer';
 import pgSession from 'connect-pg-simple';
-import pg from 'pg';
-import dotenv from 'dotenv';
-import nodemailer from 'nodemailer';
+
 
 dotenv.config();
 
