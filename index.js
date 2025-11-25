@@ -171,6 +171,19 @@ const nagpurAreas = [
 ];
 
 // Routes
+
+// Public Welcome Page (before login)
+app.get('/welcome', (req, res) => {
+  if (req.session.userId) {
+    return res.redirect('/');
+  }
+  res.render('welcome', {
+    title: 'Welcome',
+    currentYear: new Date().getFullYear(),
+    csrfToken: req.csrfToken()
+  });
+});
+
 // Home route - redirect to login if not authenticated
 app.get(['/', '/index'], (req, res) => {
   if (req.session.userId) {
@@ -180,7 +193,7 @@ app.get(['/', '/index'], (req, res) => {
       csrfToken: req.csrfToken()
     });
   } else {
-    res.redirect('/login');
+    res.redirect('/welcome');
   }
 });
 
@@ -228,6 +241,9 @@ app.post('/api/register', async (req, res) => {
 
 // Login page
 app.get('/login', (req, res) => {
+  if (req.session.userId) {
+    return res.redirect('/');
+  }
   res.render('login', {
     title: 'Login',
     csrfToken: req.csrfToken(),
@@ -261,7 +277,7 @@ app.get('/logout', (req, res) => {
     if (err) {
       return res.status(500).json({ error: 'Failed to logout' });
     }
-    res.redirect('/login');
+    res.redirect('/welcome');
   });
 });
 

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Home - LifeLink</title>
+  <title>LifeLink - Blood Donation Platform</title>
   <style>
     * {
       margin: 0;
@@ -86,70 +86,19 @@
     
     .nav-right {
       display: flex;
-      align-items: center;
       gap: 15px;
-    }
-    
-    .logout-btn {
-      background-color: #c00;
-      color: white;
-      padding: 10px 20px;
-      border-radius: 50px;
-      text-decoration: none;
-      font-weight: 600;
-      transition: all 0.3s ease;
-    }
-    
-    .logout-btn:hover { background-color: #a00; }
-    
-    .home-content {
-      margin-top: 80px;
-      padding: 60px 5%;
-      max-width: 1200px;
-      margin-left: auto;
-      margin-right: auto;
-      position: relative;
-      z-index: 1;
-    }
-    
-    .hero {
-      background: rgba(255, 255, 255, 0.95);
-      border-radius: 15px;
-      padding: 60px 40px;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-      margin-bottom: 40px;
-      text-align: center;
-    }
-    
-    .hero h1 {
-      font-size: 3rem;
-      color: #c00;
-      margin-bottom: 20px;
-      line-height: 1.3;
-    }
-    
-    .hero p {
-      font-size: 1.3rem;
-      color: #555;
-      margin-bottom: 30px;
-      line-height: 1.6;
-    }
-    
-    .cta-buttons {
-      display: flex;
-      gap: 20px;
-      justify-content: center;
-      flex-wrap: wrap;
+      align-items: center;
     }
     
     .btn {
-      padding: 12px 30px;
+      padding: 10px 25px;
       border-radius: 50px;
       font-weight: 600;
       text-decoration: none;
       transition: all 0.3s ease;
       cursor: pointer;
       border: none;
+      display: inline-block;
       font-size: 1rem;
     }
     
@@ -175,16 +124,83 @@
       color: white;
     }
     
+    .welcome-content {
+      margin-top: 80px;
+      padding: 60px 5%;
+      max-width: 1200px;
+      margin-left: auto;
+      margin-right: auto;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .hero {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 15px;
+      padding: 80px 40px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      margin-bottom: 40px;
+      text-align: center;
+    }
+    
+    .hero h1 {
+      font-size: 3.5rem;
+      color: #c00;
+      margin-bottom: 20px;
+      line-height: 1.2;
+    }
+    
+    .hero p {
+      font-size: 1.4rem;
+      color: #555;
+      margin-bottom: 40px;
+      line-height: 1.6;
+    }
+    
+    .cta-buttons {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-bottom: 60px;
+    }
+    
+    .stat-card {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 2.5rem;
+      color: #c00;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+    
+    .stat-label {
+      color: #555;
+      font-weight: 600;
+    }
+    
     .features {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 30px;
       margin-top: 40px;
     }
     
     .feature-card {
       background: white;
-      padding: 30px;
+      padding: 40px 30px;
       border-radius: 10px;
       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
       text-align: center;
@@ -192,19 +208,19 @@
     }
     
     .feature-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 25px rgba(200, 0, 0, 0.1);
+      transform: translateY(-10px);
+      box-shadow: 0 15px 30px rgba(200, 0, 0, 0.1);
     }
     
-    .feature-icon { font-size: 2.5rem; margin-bottom: 15px; }
+    .feature-icon { font-size: 3rem; margin-bottom: 15px; }
     
-    .feature-card h3 { color: #c00; margin-bottom: 10px; }
+    .feature-card h3 { color: #c00; margin-bottom: 15px; font-size: 1.3rem; }
     
-    .feature-card p { color: #666; font-size: 0.95rem; }
+    .feature-card p { color: #666; font-size: 1rem; line-height: 1.6; }
     
     @media (max-width: 768px) {
-      .hero { padding: 40px 20px; }
-      .hero h1 { font-size: 2rem; }
+      .hero { padding: 50px 20px; }
+      .hero h1 { font-size: 2.2rem; }
       .hero p { font-size: 1.1rem; }
       .cta-buttons { flex-direction: column; }
     }
@@ -221,43 +237,72 @@
   <nav class="navbar">
     <a href="/" class="logo">LifeLink</a>
     <ul class="nav-links">
-      <li><a href="/">Home</a></li>
-      <li><a href="/find-donor">Find Donor</a></li>
+      <li><a href="/welcome">Home</a></li>
       <li><a href="/about">About</a></li>
     </ul>
     <div class="nav-right">
-      <a href="/logout" class="logout-btn">Logout</a>
+      <a href="/login" class="btn btn-secondary">Login</a>
+      <a href="/register" class="btn btn-primary">Register</a>
     </div>
   </nav>
 
-  <main class="home-content">
+  <main class="welcome-content">
     <div class="hero">
-      <h1>🩸 Welcome to LifeLink</h1>
-      <p>Connecting Blood Donors with Those in Need</p>
-      <p style="font-size: 1rem; color: #777; margin: 20px 0;">
-        Every 2 seconds, someone needs blood. Help save lives by finding donors or making a donation request today.
-      </p>
+      <h1>🩸 Save Lives with LifeLink</h1>
+      <p>Connect with blood donors and recipients in your community</p>
+      <p style="font-size: 1.1rem; color: #777;">Every 2 seconds, someone needs blood. Join our mission to ensure no one dies waiting.</p>
       <div class="cta-buttons">
-        <a href="/find-donor" class="btn btn-primary">Find a Donor</a>
-        <a href="/about" class="btn btn-secondary">Learn More</a>
+        <a href="/register" class="btn btn-primary">Become a Donor</a>
+        <a href="/login" class="btn btn-secondary">Find Blood</a>
       </div>
     </div>
 
+    <div class="stats">
+      <div class="stat-card">
+        <div class="stat-number">25,000+</div>
+        <div class="stat-label">Registered Donors</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">10,000+</div>
+        <div class="stat-label">Lives Saved</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">120+</div>
+        <div class="stat-label">Partner Hospitals</div>
+      </div>
+    </div>
+
+    <h2 style="text-align: center; color: #c00; margin: 60px 0 40px; font-size: 2rem;">Why Choose LifeLink?</h2>
     <div class="features">
       <div class="feature-card">
         <div class="feature-icon">🔍</div>
-        <h3>Find Donors</h3>
-        <p>Search through verified blood donors in your area by blood type and location.</p>
+        <h3>Find Donors Instantly</h3>
+        <p>Search verified blood donors by blood type and location in real-time.</p>
       </div>
       <div class="feature-card">
-        <div class="feature-icon">📧</div>
-        <h3>Request Blood</h3>
-        <p>Send donation requests directly to donors in emergency situations.</p>
+        <div class="feature-icon">📞</div>
+        <h3>Direct Contact</h3>
+        <p>Connect directly with donors without intermediaries. Get responses fast.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🏥</div>
+        <h3>Hospital Integrated</h3>
+        <p>Connected with major hospitals and blood banks for streamlined donations.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🛡️</div>
+        <h3>Safe & Secure</h3>
+        <p>Your health information is protected with advanced security measures.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📱</div>
+        <h3>Easy to Use</h3>
+        <p>Simple registration and intuitive interface for all users.</p>
       </div>
       <div class="feature-card">
         <div class="feature-icon">💚</div>
         <h3>Save Lives</h3>
-        <p>Be part of a community dedicated to saving lives through blood donation.</p>
+        <p>Be part of a community dedicated to saving lives every single day.</p>
       </div>
     </div>
   </main>
